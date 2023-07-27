@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [Header("Ячейка оружия")] public GameObject cellWeapon;
+    [Header("Ячейка шлема")] public GameObject cellHelmet;
+    [Header("Ячейка щита")] public GameObject cellShield;
+
     private Animator animator;
     void Start()
     {
@@ -12,7 +16,6 @@ public class Player : MonoBehaviour
 
     private void InitFarm()
     {
-        Debug.Log("ASDSDAASDDAADS");
         animator.Play("HeroKnight_Attack1");
     }
 

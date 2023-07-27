@@ -3,31 +3,25 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.Profiling;
+using System;
 
 public class Game : MonoBehaviour
 {
-    public static Game Instance { get; private set; } // реализация паттерна синглтон
-    [Header("Префабы противников")] public List<GameObject> enemyList;
-    [Header("Префабы бустеров")] public List<GameObject> boosterList;
-    [Header("Максимальное количество противников на карте")] public int maxEnemyCount = 2;
-    [Header("Заработано очков")] public int score = 0;
-    [Header("Игра окончена")] public bool isGameOver = true;
-    [Header("Имя игрока")] public InputField playerName;
-    public bool isFirstEntryGame = true;
-    private float flashEffect = 0f;
-    private float spawnSpeed = 10f;
-    public float movementEnemySpeed = 10f;
-    public float maxEnemyHealth = 10f;
-    public bool canSpawn = true;
+    public static Game Instance { get; private set; }
+    [Header("Объект игрока")] public GameObject player;
+    [Header("Префабы предметов инвентаря")] public List<GameObject> itemPrefabList;
+    [Header("Коллекция иконок")] public Icon[] icons;
+    private bool canSpawn = true;
 
     private void Awake()
     {
-        Instance = this; // присваеваем объект самого себя в статичное свойство синглтона
+        Instance = this;
     }
 
     private void Start()
     {
-        //Interface.Instance.ActivateMenu();
+    
     }
 
 
@@ -41,8 +35,22 @@ public class Game : MonoBehaviour
 
     }
 
+    public void SpawnItem()
+    {
+        GameObject itemInstance;
+        int itemIndex = System.Convert.ToInt32(UnityEngine.Random.Range(0, itemPrefabList.Count));
+        if (canSpawn)
+        {
+            itemInstance = Instantiate(itemPrefabList[itemIndex]) as GameObject;
+            
+        }
+        else
+        {
+            SpawnItem();
+        }
+    }
 
-    IEnumerator SpawnEnemy()
+    IEnumerator SpawnItemtt()
     {
         while (true)
         {
