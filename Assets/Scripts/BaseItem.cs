@@ -3,15 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
+//using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public abstract class BaseItem : MonoBehaviour
 {
-    [Header("Характеристика - здоровье")] public int healthPoints;
-    [Header("Характеристика - атака")] public int attack;
-    [Header("Характеристика - защита")] public int defence;
-    [Header("Суммарный показатель характеристик предмета")] public int itemScore;
-    [Header("Иконка предмета")] public Image icon;
+    [Header("Stat - Health Points")] public int healthPoints;
+    [Header("Stat - Health Points")] public int attack;
+    [Header("Stat - Health Points")] public int defence;
+    [Header("Amount of all stats")] public int itemQuality;
     public int type;
     public int healthPointsMin;
     public int healthPointsMax;
@@ -21,30 +21,37 @@ public abstract class BaseItem : MonoBehaviour
     public int defenceMax;
     public ItemType itemType;
 
+    private static System.Random random = new System.Random();
+
     Icon GetRandomIconFromList(List<Icon> list)
     {
-        var random = new System.Random();
         return list[random.Next(list.Count)];
     }
     void Start()
     {
+        transform.GetComponent<Image>().enabled = false;
         SetCharacteristicsRange();
         healthPoints = System.Convert.ToInt32(UnityEngine.Random.Range(healthPointsMin, healthPointsMax));
         attack = System.Convert.ToInt32(UnityEngine.Random.Range(attackMin, attackMax));
         defence = System.Convert.ToInt32(UnityEngine.Random.Range(defenceMin, defenceMax));
-        itemScore = healthPoints + attack + defence;
-        if (itemScore >= 50)
+        itemQuality = healthPoints + attack + defence;
+        if (itemQuality >= 50)
         {
-            GetRandomIconFromList(Game.Instance.icons.Where(x => x.itemType == itemType).Where(x => x.isEpic).ToList());
+            transform.GetComponent<Image>().sprite = GetRandomIconFromList(Game.Instance.icons.Where(x => x.itemType == itemType).Where(x => x.isEpic).ToList()).source;
         }
         else
         {
-            GetRandomIconFromList(Game.Instance.icons.Where(x => x.itemType == itemType).ToList());
+            transform.GetComponent<Image>().sprite = GetRandomIconFromList(Game.Instance.icons.Where(x => x.itemType == itemType).ToList()).source;
         }
     }
 
     public virtual void SetCharacteristicsRange()
     {
         
+    }
+
+    void Update()
+    {
+
     }
 }
