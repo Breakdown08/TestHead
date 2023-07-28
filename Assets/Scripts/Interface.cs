@@ -3,12 +3,15 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 
 public class Interface : MonoBehaviour
 {
     public GameObject newItem;
     public GameObject currentItem;
     public GameObject popup;
+    public TMP_Text gearScore;
+    public TMP_Text money;
     public static Interface Instance { get; private set; } // Паттерн синглтон
 
     private void Awake()
@@ -31,7 +34,8 @@ public class Interface : MonoBehaviour
     {
         if (item)
         {
-            currentItem.GetComponent<ItemInfo>().SetItem(item);
+            Debug.Log("есть похожий");
+            currentItem.GetComponent<ItemInfo>().SetItem(item, true);
         }
     }
 
@@ -48,7 +52,22 @@ public class Interface : MonoBehaviour
 
     public void DropItem()
     {
-        Game.Instance.EqipItem();
+        Game.Instance.DropItem();
         ClosePopup();
+    }
+
+    public void UpdateGearScore()
+    {
+        gearScore.text = "Gear Score: " + Game.Instance.gearScore.ToString();
+    }
+
+    public void UpdateMoney()
+    {
+        money.text = "Money: " + Game.Instance.money.ToString();
+    }
+
+    public void Update()
+    {
+
     }
 }

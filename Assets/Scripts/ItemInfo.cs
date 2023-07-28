@@ -18,7 +18,7 @@ public class ItemInfo : MonoBehaviour
 
     public void MergeField(int currentValue, int newValue, ItemField itemField)
     {
-        if (currentValue > newValue)
+        if (currentValue < newValue)
         {
             itemField.ActivatePositiveIndicator();
         }
@@ -32,7 +32,7 @@ public class ItemInfo : MonoBehaviour
         }
     }
 
-    public IEnumerator UpdateStats()
+    public IEnumerator UpdateStats(bool isCurrent)
     {
         yield return new WaitForEndOfFrame();
         defence.SetText("Defence: " + item.GetComponent<BaseItem>().defence.ToString());
@@ -41,13 +41,16 @@ public class ItemInfo : MonoBehaviour
         itemQuality.SetText("Quality: " + item.GetComponent<BaseItem>().itemQuality.ToString());
         icon.sprite = item.transform.GetComponent<Image>().sprite;
 
-        GameObject currentItem = Game.Instance.GetCurrentItem(item.GetComponent<BaseItem>().itemType);
-        if (currentItem)
+        if (!isCurrent)
         {
-            MergeField(currentItem.GetComponent<BaseItem>().healthPoints, item.GetComponent<BaseItem>().healthPoints, healthPoints);
-            MergeField(currentItem.GetComponent<BaseItem>().defence, item.GetComponent<BaseItem>().defence, defence);
-            MergeField(currentItem.GetComponent<BaseItem>().attack, item.GetComponent<BaseItem>().attack, attack);
-            MergeField(currentItem.GetComponent<BaseItem>().itemQuality, item.GetComponent<BaseItem>().itemQuality, itemQuality);
+            GameObject currentItem = Game.Instance.GetCurrentItem(item.GetComponent<BaseItem>().itemType);
+            if (currentItem)
+            {
+                MergeField(currentItem.GetComponent<BaseItem>().healthPoints, item.GetComponent<BaseItem>().healthPoints, healthPoints);
+                MergeField(currentItem.GetComponent<BaseItem>().defence, item.GetComponent<BaseItem>().defence, defence);
+                MergeField(currentItem.GetComponent<BaseItem>().attack, item.GetComponent<BaseItem>().attack, attack);
+                MergeField(currentItem.GetComponent<BaseItem>().itemQuality, item.GetComponent<BaseItem>().itemQuality, itemQuality);
+            }
         }
     }
 
@@ -56,9 +59,9 @@ public class ItemInfo : MonoBehaviour
         
     }
 
-    public void SetItem(GameObject newItem)
+    public void SetItem(GameObject newItem, bool isCurrent = false)
     {
         item = newItem;
-        StartCoroutine(UpdateStats());
+        StartCoroutine(UpdateStats(isCurrent));
     }
 }

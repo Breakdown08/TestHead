@@ -73,6 +73,10 @@ public class Player : MonoBehaviour
 
     void OnMouseDown()
     {
-        InitFarm();
+        if (!Interface.Instance.popup.activeSelf)
+        {
+            InitFarm();
+        }
+        
     }
 }
